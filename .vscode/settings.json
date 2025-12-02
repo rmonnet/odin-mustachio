@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  // Disable formatting for a specific language mode (json with comments)
+  "[jsonc]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": ""
+  },
+}

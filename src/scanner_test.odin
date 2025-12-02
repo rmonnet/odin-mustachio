@@ -1,15 +1,7 @@
 package mustachio
 
-import "base:runtime"
 import vmem "core:mem/virtual"
 import "core:testing"
-
-arena_init :: proc(a: ^vmem.Arena) -> runtime.Allocator {
-
-	arena_err := vmem.arena_init_growing(a)
-	ensure(arena_err == nil)
-	return vmem.arena_allocator(a)
-}
 
 expect_next_token :: proc(
 	t: ^testing.T,
@@ -27,7 +19,7 @@ expect_next_token :: proc(
 }
 
 @(test)
-test_text_only :: proc(t: ^testing.T) {
+test_scanner__text_only :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -41,7 +33,7 @@ test_text_only :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_tag_only :: proc(t: ^testing.T) {
+test_scanner__tag_only :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -57,7 +49,7 @@ test_tag_only :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_text_with_tag :: proc(t: ^testing.T) {
+test_scanner__text_with_tag :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -75,7 +67,7 @@ test_text_with_tag :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_section_only :: proc(t: ^testing.T) {
+test_scanner__section_only :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -91,7 +83,7 @@ test_section_only :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_end_section_only :: proc(t: ^testing.T) {
+test_scanner__end_section_only :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -107,7 +99,7 @@ test_end_section_only :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_inverted_section_only :: proc(t: ^testing.T) {
+test_scanner__inverted_section_only :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -123,7 +115,7 @@ test_inverted_section_only :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_partial_only :: proc(t: ^testing.T) {
+test_scanner__partial_only :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)
@@ -138,7 +130,7 @@ test_partial_only :: proc(t: ^testing.T) {
 }
 
 @(test)
-test_section_with_content :: proc(t: ^testing.T) {
+test_scanner__section_with_content :: proc(t: ^testing.T) {
 
 	arena: vmem.Arena
 	allocator := arena_init(&arena)

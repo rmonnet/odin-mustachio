@@ -2,6 +2,7 @@ package mustachio
 
 import "base:runtime"
 import "core:unicode/utf8"
+
 Token :: struct {
 	type:   TokenType,
 	lexeme: string,
@@ -14,7 +15,7 @@ destroy_token :: proc(t: ^Token) {
 }
 
 TokenType :: enum {
-	Error,
+	Empty,
 	Open_Tag,
 	Close_Tag,
 	Open_Comment,
@@ -36,9 +37,8 @@ Scanner :: struct {
 
 create_scanner :: proc(source: string, allocator := context.allocator) -> Scanner {
 
-	source_as_runes := utf8.string_to_runes(source, allocator)
 	return Scanner {
-		source = source_as_runes,
+		source = utf8.string_to_runes(source, allocator),
 		start = 0,
 		current = 0,
 		line = 1,
@@ -90,16 +90,6 @@ text :: proc(s: ^Scanner) -> Token {
 }
 
 @(private = "file")
-is_digit :: proc(c: byte) -> bool {
-	return c >= '0' && c <= '9'
-}
-
-@(private = "file")
-is_alpha :: proc(c: byte) -> bool {
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
-}
-
-@(private = "file")
 is_at_end :: proc(s: Scanner) -> bool {
 
 	return s.current >= len(s.source)
@@ -142,31 +132,6 @@ is_next :: proc(s: Scanner, want: ..rune) -> bool {
 	}
 	return true
 }
-/*
-@(private = "file")
-skip_whitespace :: proc() {
-	// We will handle comments with whitespace for convenience.
-	for {
-		if is_at_end() {
-			return
-		}
-		c := peek()
-		switch c {
-		case ' ', '\r', '\t':
-			advance()
-		case '\n':
-			scanner.line += 1
-			advance()
-		case '/':
-			if peek_next() == '/' {
-				for peek() != '\n' && !is_at_end() { advance() }
-			}
-		case:
-			return
-		}
-	}
-}
-*/
 
 @(private = "file")
 peek :: proc(s: Scanner, ahead := 0) -> rune {
@@ -174,10 +139,4 @@ peek :: proc(s: Scanner, ahead := 0) -> rune {
 	pos := s.current + ahead
 	if (pos) >= len(s.source) { return 0 }
 	return s.source[pos]
-}
-
-@(private = "file")
-error_token :: proc(s: Scanner, message: string) -> Token {
-
-	return Token{type = .Error, lexeme = message, line = s.line}
 }

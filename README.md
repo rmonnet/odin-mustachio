@@ -14,7 +14,7 @@ This code is copyrighted © Robert Monnet 2025 and released under the [MIT Licen
 Because this implementation is geared towards code rather than HTML generation, it deviates from the [Mustache specifications][mustache-specification] as follow:
 
 - **No HTML escape by default**: While the original Mustache tags expand to HTML escaped text by default unless you use triple brackets (`{{{name}}}`), Mustachio will not escape HTML unless you add a Mustache comment (`{{!escape=on}}`). All tags after the comment will be HTML escaped until the comment `{{!escape=off}}` is encountered.
-- **Triple brackets are not supported***
+- **Triple brackets are not supported**
 
 
 [mustache-website]: https://mustache.github.io/
