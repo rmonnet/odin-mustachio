@@ -35,7 +35,7 @@ Scanner :: struct {
 	allocator: runtime.Allocator,
 }
 
-create_scanner :: proc(source: string, allocator := context.allocator) -> Scanner {
+scanner_create :: proc(source: string, allocator := context.allocator) -> Scanner {
 
 	return Scanner {
 		source = utf8.string_to_runes(source, allocator),
@@ -46,12 +46,12 @@ create_scanner :: proc(source: string, allocator := context.allocator) -> Scanne
 	}
 }
 
-destroy_scanner :: proc(s: ^Scanner) {
+scanner_destroy :: proc(s: ^Scanner) {
 
 	delete(s.source)
 }
 
-next_token :: proc(s: ^Scanner) -> Token {
+scanner_next_token :: proc(s: ^Scanner) -> Token {
 
 	s.start = s.current
 	if is_at_end(s^) { return make_token(s^, .End_Of_File) }

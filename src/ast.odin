@@ -9,7 +9,6 @@ Expr :: union {
 	Tag,
 	Comment,
 	Section,
-	Inverted_Section,
 	End_Of_Section,
 	Partial,
 }
@@ -28,13 +27,9 @@ Comment :: struct {
 }
 
 Section :: struct {
-	varname: string,
-	content: []Expr,
-}
-
-Inverted_Section :: struct {
-	varname: string,
-	content: []Expr,
+	varname:  string,
+	inverted: bool,
+	content:  []Expr,
 }
 
 Partial :: struct {
@@ -60,22 +55,16 @@ expr_to_string :: proc(e: Expr, allocator: runtime.Allocator) -> string {
 		output = fmt.aprintf("Comment{{%s}}", expr.content, allocator = allocator)
 	case Section:
 		content_as_str := exprs_to_string(expr.content, allocator)
+		inverted := expr.inverted ? "(inverted)" : ""
 		output = fmt.aprintf(
-			"Section{{%s[%s]}}",
+			"Section{{%s%s %s}}",
 			expr.varname,
-			content_as_str,
-			allocator = allocator,
-		)
-	case Inverted_Section:
-		content_as_str := exprs_to_string(expr.content, allocator)
-		output = fmt.aprintf(
-			"InvertedSection{{%s[%s]}}",
-			expr.varname,
+			inverted,
 			content_as_str,
 			allocator = allocator,
 		)
 	case Partial:
-		output = fmt.aprintf("Tag{%s}", expr.varname, allocator = allocator)
+		output = fmt.aprintf("Partial{{%s}}", expr.varname, allocator = allocator)
 	case End_Of_Section:
 		output = fmt.aprintf("End_Of_Section{{%s}}}", expr.varname, allocator = allocator)
 	}
@@ -88,6 +77,6 @@ exprs_to_string :: proc(es: []Expr, allocator: runtime.Allocator) -> string {
 	for subexpr, i in es {
 		content[i] = expr_to_string(subexpr, allocator)
 	}
-	content_as_str := strings.join(content, ", ", allocator)
-	return content_as_str
+	content_as_str := strings.join(content, ", ", allocator = allocator)
+	return fmt.aprintf("[%s]", content_as_str, allocator = allocator)
 }
